@@ -1,0 +1,76 @@
+﻿
+<div class="modal fade" id="Modalinfo" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal-dialog-centered modal-xl modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header bg-warning text-light">
+				<div class="col-10 offset-1">
+					<center><h1 class="modal-title" style="color:black;">Welcome to Auction House App!</h1></center>
+				</div>
+				<div class="col-1">
+					<button type="button" class="float-right btn-lg btn-danger" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true"><i class="far fa-window-close"></i></span>
+					</button>
+				</div>
+			</div>
+			<div class="modal-body justify-content-center">
+				<h4 class="mt-0">Please, read the information below, to understand how this application works</h4>
+
+				This is an application for trade items between users (in this case it's a game Auction House example),
+				but it could be used as an ecommerce application after applied necessary changes.
+				To start using this application You should login in to the service as ADMIN to get all of the functionalities:<br />
+				Admin login:&emsp;<i class="text-info">admin@gmail.com</i><br />
+				Password:&emsp;<i class="text-info">Admin123*</i><br />
+				Now You have access to <a class="btn btn-info btn-sm text-white">Content Managment &nbsp;<i class="fas fa-caret-down"></i></a> :<br />
+				<ul>
+					<li>Create, Edit and Delete: <strong>Category</strong>, <strong>SubCategory</strong>, <strong>Item Quality</strong>, <strong>Class Item</strong>(for which game character an item is intended), and <strong>Currency Bundle</strong>.</li>
+					<li>
+						Create and management:<br />
+						-<strong>Game Items</strong>(few properties and image)<br />
+						-<strong>Users</strong>(add/or change role to the user, lock and unlock, give amount of currency, delete users)<br />
+					</li>
+				</ul>
+				Second option is to register as NEW USER. Admin functionalities are hide.<br />
+				In this case You have access to:<br />
+				<ul>
+					<li>
+						Buing currency bundle - using Stripe service(example credit card numbers):<br />
+						<ul>
+							<li>4242 4242 4242 4242 (Visa), &emsp;CVC - Any 3 digits, &emsp;Date: Any future date</li>
+							<li>5555 5555 5555 4444 (MasterCard),  &emsp;CVC - Any 3 digits, &emsp;Date: Any future date</li>
+							<li>3782 822463 10005 (American Express),  &emsp;CVC - Any 4 digits, &emsp;Date: Any future date</li>
+						</ul>
+					</li>
+					*see more test card numbers at:
+					<span class="text-info"><a href="https://stripe.com/docs/testing#cards" target="_blank">Stripe - test credit card numbers.</a></span>
+					<br />
+
+					The application should send an email (using SendGrid service) after shopping, depending of the shopping status (
+					<span style="color:forestgreen">succeeded</span>, or
+					<span style="color:red">rejected</span> when some problems occured)
+
+					<li>Buing created items using <a class="btn btn-warning btn-sm" style="text-decoration:none; color:white; border-radius: 30px 30px 0px 0px; height:26px; padding-bottom:15px; margin:0px;">&emsp; Premium Currency Market &emsp; </a> tab</li>
+					<li>After buing items, You can manage them in Your <a class="btn btn-danger btn-sm" style="text-decoration:none; color:white; border-radius: 30px 30px 0px 0px; height:26px; padding:5px; margin:0px;">&emsp; Inventory &emsp;</a> tab</li>
+					<li>You can post Yours items and manage them in <a class="btn btn-info btn-sm" style="text-decoration:none; color:white; border-radius: 30px 30px 0px 0px; height:26px; padding:5px; margin:0px;">&emsp; My Posted Items &emsp;</a> tab</li>
+					<li>All posted items are in <a class="btn btn-primary btn-sm" style="text-decoration:none; color:white; border-radius: 30px 30px 0px 0px; height:26px; padding:5px; margin:0px;">&emsp; AH-search items to buy &emsp;</a> tab - Use this view to search, sort and filter items which You want to buy/find.</li>
+
+				</ul>
+				This application was made for the development of my programming skills, so feel freely to do whatever You want:)
+				<br />
+				<i>
+					On the future I want to add:
+					<ul class="mb-0">
+						<li>more roles and claims including understandable and simple management</li>
+						<li>"Bidding" options to make this application more functional</li>
+						<li>bug fixes and other improvements</li>
+						</li>
+					</ul>
+				</i>
+			</div>
+
+			<div class="modal-footer bg-dark text-white">
+				email: rafalblaszczykdev@gmail.com &emsp;
+				<i style="text-align:left;">Rafal Blaszczyk &copy; 2020 ASP.NET Core My e-commerce App</i>
+			</div>
+		</div>
+	</div>
+</div>

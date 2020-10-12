@@ -1,0 +1,96 @@
+﻿@model AuctionHouseApp.Models.ViewModels.GameItemViewModel
+
+@{
+	ViewData["Title"] = "Details";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<br />
+<h2 class="text-info">Details Game Item</h2>
+<br />
+
+<div class="border backgroundDark row">
+	<div class="col-8">
+		<input type="hidden" asp-for="GameItemPVM.Id" />
+		<fieldset disabled>
+			<div class="form-group row">
+				<div class="col-4">
+					<label asp-for="@Model.GameItemPVM.Name" class="col-form-label"></label>
+				</div>
+				<div class="col-8">
+					<input asp-for="@Model.GameItemPVM.Name" class="form-control" />
+				</div>
+			</div>
+
+			<div class="form-group row">
+				<div class="col-4">
+					<label asp-for="@Model.GameItemPVM.LevelRequired" class="col-form-label"></label>
+				</div>
+				<div class="col-8">
+					<input asp-for="@Model.GameItemPVM.LevelRequired" class="form-control" />
+				</div>
+			</div>
+
+
+
+			<div class="form-group row">
+				<div class="col-4">
+					<label asp-for="GameItemPVM.CategoryId" class="col-form-label"></label>
+				</div>
+				<div class="col-8">
+					<input asp-for="@Model.GameItemPVM.CategoryVP.Name" class="form-control"></input>
+				</div>
+			</div>
+
+			<div class="form-group row">
+				<div class="col-4">
+					<label asp-for="GameItemPVM.SubCategoryId" class="col-form-label"></label>
+				</div>
+				<div class="col-8">
+					<input asp-for="@Model.GameItemPVM.SubCategoryVP.Name" class="form-control"></input>
+				</div>
+			</div>
+
+			<div class="form-group row">
+				<div class="col-4">
+					<label asp-for="@Model.GameItemPVM.ForWhichClassItemId" class="col-form-label"></label>
+				</div>
+				<div class="col-8">
+					<input asp-for="@Model.GameItemPVM.ForWhichClassItemVP.Name" class="form-control"></input>
+				</div>
+			</div>
+
+			<div class="form-group row">
+				<div class="col-4">
+					<label asp-for="@Model.GameItemPVM.ItemQualityId" class="col-form-label"></label>
+				</div>
+				<div class="col-8">
+					<input asp-for="@Model.GameItemPVM.ItemQualityVP.Name" class="form-control"></input>
+				</div>
+			</div>
+
+			<div class="form-group row">
+				<div class="col-4">
+					<label asp-for="@Model.GameItemPVM.PremiumCurrencyPrice" class="col-form-label"></label>
+				</div>
+				<div class="col-8">
+					<input asp-for="@Model.GameItemPVM.PremiumCurrencyPrice" class="form-control" />
+				</div>
+			</div>
+		</fieldset>
+	</div>
+
+	<div class="col-1"></div>
+	<div class="col-3">
+		<img src="@Model.GameItemPVM.Image" width="100%" style="border-radius:5px;border:1px solid #bbb9b9;" />
+	</div>
+
+	<div class="col-8">
+		<div class="col-8 offset-4">
+			<partial name="_DetailsAndBackToListButton" model="Model.GameItemPVM.Id" />
+		</div>
+	</div>
+</div>
+
+
+

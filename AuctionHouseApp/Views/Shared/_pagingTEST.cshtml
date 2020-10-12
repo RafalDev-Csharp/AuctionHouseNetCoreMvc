@@ -1,0 +1,72 @@
+﻿@model IEnumerable<object>
+@using static ReflectionIT.Mvc.Paging.IPagingList
+@using ReflectionIT.Mvc.Paging
+
+@{
+	//int page = 1;
+
+	//int? id = ViewContext.RouteData.Values["page"] as int?;
+
+	//	page = id.GetValueOrDefault();
+	var pgListX = PagingList.Create(Model, 2, 0);
+	var pgList = PagingList.Create(Model, 2, 1);
+	
+
+
+}
+
+@{
+	var start = pgList.StartPageIndex;
+	var stop = pgList.StopPageIndex;
+}
+
+@if (pgList.PageCount > 1)
+{
+	<ul class="pagination justify-content-end">
+
+		@if (start > 1)
+		{
+			<li class="page-item">
+				<a href="@Url.Action(pgList.Action, pgList.GetRouteValueForPage(1))" aria-label="First" class="page-link">
+					<span aria-hidden="true">1</span>
+				</a>
+			</li>
+		}
+
+		@if (pgList.PageIndex > 1)
+		{
+			<li class="page-item">
+				<a href="@Url.Action(pgList.Action, pgList.GetRouteValueForPage(pgList.PageIndex - 1))" aria-label="Previous" class="page-link">
+					<span aria-hidden="true">&laquo;</span>
+				</a>
+			</li>
+		}
+
+		@for (int i = start; i <= stop; i++)
+		{
+			<li class="page-item @((pgList.PageIndex == i) ? "active" : null)">
+				
+				@Html.ActionLink(i.ToString(), pgList.Action, pgList.GetRouteValueForPage(i), new { @class = "page-link" })
+			</li>
+		}
+
+		@if (pgList.PageIndex < pgList.PageCount)
+		{
+			<li class="page-item">
+				<a href="@Url.Action(pgList.Action, pgList.GetRouteValueForPage(pgList.PageIndex + 1))" aria-label="Next" class="page-link">
+					<span aria-hidden="true">&raquo;</span>
+				</a>
+			</li>
+		}
+
+		@if (stop < pgList.PageCount)
+		{
+			<li class="page-item">
+				<a href="@Url.Action(pgList.Action, pgList.GetRouteValueForPage(pgList.PageCount))" aria-label="Last" class="page-link">
+					<span aria-hidden="true">@pgList.PageCount</span>
+				</a>
+			</li>
+		}
+
+	</ul>
+}

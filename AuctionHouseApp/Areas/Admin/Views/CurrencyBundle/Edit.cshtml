@@ -1,0 +1,60 @@
+﻿@model AuctionHouseApp.Models.ViewModels.CurrencyBundlePlusErrorViewModel
+
+@{
+	ViewData["Title"] = "Edit";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<br />
+<h2 class="text-info">Edit Currency Bundle</h2>
+<br />
+
+<partial name="_ErrorMessage" model="Model.StatusMessage" />
+
+<form method="post" asp-action="Edit">
+	<input type="hidden" asp-for="@Model.CurrencyBundlePVM.Id" />
+	<div class="border backgroundDark">
+		<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+		<div class="form-group row">
+			<div class="col-2">
+				<label asp-for="@Model.CurrencyBundlePVM.Id" class="col-form-label"></label>
+			</div>
+			<div class="col-5">
+				<input asp-for="@Model.CurrencyBundlePVM.Id" disabled class="form-control" />
+			</div>
+		</div>
+		<div class="form-group row">
+			<div class="col-2">
+				<label asp-for="@Model.CurrencyBundlePVM.CashValue" class="col-form-label"></label>
+			</div>
+			<div class="col-5">
+				<input asp-for="@Model.CurrencyBundlePVM.CashValue" class="form-control" />
+			</div>
+			<span asp-validation-for="@Model.CurrencyBundlePVM.CashValue" class="text-danger"></span>
+		</div>
+		<div class="form-group row">
+			<div class="col-2">
+				<label asp-for="@Model.CurrencyBundlePVM.GameCurrencyAmount" class="col-form-label"></label>
+			</div>
+			<div class="col-5">
+				<input asp-for="@Model.CurrencyBundlePVM.GameCurrencyAmount" class="form-control" />
+			</div>
+			<span asp-validation-for="@Model.CurrencyBundlePVM.GameCurrencyAmount" class="text-danger"></span>
+		</div>
+		<div class="form-group row">
+			<div class="col-2">
+				<label asp-for="@Model.CurrencyBundlePVM.BonusCurrency" class="col-form-label"></label>
+			</div>
+			<div class="col-5">
+				<input asp-for="@Model.CurrencyBundlePVM.BonusCurrency" class="form-control" />
+			</div>
+			<span asp-validation-for="@Model.CurrencyBundlePVM.BonusCurrency" class="text-danger"></span>
+		</div>
+		<div class="form-group row">
+			<partial name="_EditAndBackToListButton" model="@Model.CurrencyBundlePVM.Id" />
+		</div>
+	</div>
+</form>
+
+
+

@@ -1,0 +1,132 @@
+﻿@model AuctionHouseApp.Models.ViewModels.GameItemViewModel
+@using AuctionHouseApp.Extension
+@{
+	ViewData["Title"] = "Create";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<br />
+<h2 class="text-info">Create Game Item</h2>
+<br />
+
+<form method="post" asp-action="Create" enctype="multipart/form-data">
+	<div class="border backgroundDark">
+		<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+		<div class="form-group row">
+			<div class="col-2">
+				<label asp-for="@Model.GameItemPVM.Name" class="col-form-label"></label>
+			</div>
+			<div class="col-5">
+				<input asp-for="@Model.GameItemPVM.Name" class="form-control" />
+			</div>
+			<span asp-validation-for="@Model.GameItemPVM.Name" class="text-danger"></span>
+		</div>
+
+		<div class="form-group row">
+			<div class="col-2">
+				<label asp-for="@Model.GameItemPVM.LevelRequired" class="col-form-label"></label>
+			</div>
+			<div class="col-5">
+				<input asp-for="@Model.GameItemPVM.LevelRequired" class="form-control" />
+			</div>
+			<span asp-validation-for="@Model.GameItemPVM.LevelRequired" class="text-danger"></span>
+		</div>
+
+		<div class="form-group row">
+			<div class="col-2">
+				<label asp-for="@Model.GameItemPVM.Image" class="col-form-label"></label>
+			</div>
+			<div class="col-5">
+				<input type="file" name="files" multiple class="form-control" />
+			</div>
+		</div>
+
+		<div class="form-group row">
+			<div class="col-2">
+				<label asp-for="GameItemPVM.CategoryId" class="col-form-label"></label>
+			</div>
+			<div class="col-5">
+				<select asp-for="@Model.GameItemPVM.CategoryId" id="CategoryId" asp-items="Model.CategoryList.ToSelectListItem(Model.GameItemPVM.CategoryId)" class="form-control"></select>
+			</div>
+		</div>
+
+		<div class="form-group row">
+			<div class="col-2">
+				<label asp-for="GameItemPVM.SubCategoryId" class="col-form-label"></label>
+			</div>
+			<div class="col-5">
+				<select asp-for="@Model.GameItemPVM.SubCategoryId" name="SubCategoryId" id="SubCategoryId" asp-items="@(new SelectList(string.Empty, "Id", "Name"))" class="form-control"></select>
+			</div>
+		</div>
+
+		<div class="form-group row">
+			<div class="col-2">
+				<label asp-for="@Model.GameItemPVM.ForWhichClassItemId" class="col-form-label"></label>
+			</div>
+			<div class="col-5">
+				<select asp-for="@Model.GameItemPVM.ForWhichClassItemId" id="ForWhichClassItemId" asp-items="Model.ForWhichClassItemsList.ToSelectListItem(Model.GameItemPVM.ForWhichClassItemId)" class="form-control"></select>
+			</div>
+		</div>
+
+		<div class="form-group row">
+			<div class="col-2">
+				<label asp-for="@Model.GameItemPVM.ItemQualityId" class="col-form-label"></label>
+			</div>
+			<div class="col-5">
+				<select asp-for="@Model.GameItemPVM.ItemQualityId" id="ItemQualityId" asp-items="Model.ItemQualityList.ToSelectListItem(Model.GameItemPVM.ItemQualityId)" class="form-control"></select>
+			</div>
+		</div>
+
+		<div class="form-group row">
+			<div class="col-2">
+				<label asp-for="@Model.GameItemPVM.PremiumCurrencyPrice" class="col-form-label"></label>
+			</div>
+			<div class="col-5">
+				<input asp-for="@Model.GameItemPVM.PremiumCurrencyPrice" class="form-control" />
+			</div>
+			<span asp-validation-for="@Model.GameItemPVM.PremiumCurrencyPrice" class="text-danger"></span>
+		</div>
+
+
+
+		<div class="form-group row">
+			<div class="col-5 offset-2">
+				<partial name="_CreateAndBackToListButton" />
+			</div>
+		</div>
+	</div>
+</form>
+
+
+
+
+@section Scripts{
+
+
+
+	<script type="text/javascript">
+        $(document).ready(function () {
+            getSubCategory();
+            $('#CategoryId').change(function () {
+                getSubCategory();
+            });
+        });
+        function getSubCategory() {
+            var url = '@Url.Content("~/")' + "Admin/SubCategory/GetSubCategory";
+            var ddlsoruce = '#CategoryId';
+            $.getJSON(url, { id: $(ddlsoruce).val() }, function (data) {
+                var items = '';
+                $('#SubCategoryId').empty();
+                $.each(data, function (i, subcategory) {
+                    items += "<option value='" + subcategory.value + "'>" + subcategory.text + "</option>";
+                });
+                $('#SubCategoryId').html(items);
+            })
+        }
+	</script>
+
+
+	@{ await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+}

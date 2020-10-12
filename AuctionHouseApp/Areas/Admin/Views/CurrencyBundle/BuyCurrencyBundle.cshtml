@@ -1,0 +1,79 @@
+﻿@model CurrencyBundle
+
+@using Microsoft.Extensions.Options
+
+@inject IOptions<AuctionHouseApp.Utility.StripeSettings> Stripe
+
+
+@{
+	ViewData["Title"] = "Delete";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<br />
+<h2 class="text-info">Buy this Currency Bundle</h2>
+<br />
+
+<form method="post" asp-action="BuyCurrencyBundle">
+	<div class="border backgroundDark">
+		<div class="form-group row">
+			<div class="col-2">
+				<label asp-for="@Model.Id" class="col-form-label"></label>
+			</div>
+			<div class="col-5">
+				<input asp-for="@Model.Id" disabled class="form-control" />
+			</div>
+		</div>
+		<div class="form-group row">
+			<div class="col-2">
+				<label asp-for="@Model.CashValue" class="col-form-label"></label>
+			</div>
+			<div class="col-5">
+				<input asp-for="@Model.CashValue" disabled class="form-control" />
+			</div>
+		</div>
+		<div class="form-group row">
+			<div class="col-2">
+				<label asp-for="@Model.GameCurrencyAmount" class="col-form-label"></label>
+			</div>
+			<div class="col-5">
+				<input asp-for="@Model.GameCurrencyAmount" disabled class="form-control" />
+			</div>
+		</div>
+		<div class="form-group row">
+			<div class="col-2">
+				<label asp-for="@Model.BonusCurrency" class="col-form-label"></label>
+			</div>
+			<div class="col-5">
+				<input asp-for="@Model.BonusCurrency" disabled class="form-control" />
+			</div>
+		</div>
+		<div class="form-group row">
+			@{
+				var CashValueToStripe = Model.CashValue * 100;
+			}
+			<script src="https://checkout.stripe.com/checkout.js" class="stripe-button" 
+					data-key="@Stripe.Value.PublishableKey"
+					data-amount="@CashValueToStripe"
+					data-name="Auction-House"
+					data-label="Buy Now!"
+					data-description="Auction House. Stripe - Payment"
+					data-locale="auto"
+					data-allow-remember-me="false"
+					data-image="https://stripe.com/img/documentation/checkout/marketplace.png">
+			</script>
+			<script>
+				document.getElementsByClassName("stripe-button-el")[0].style.display = 'none';
+			</script>
+			<div class="col-5 offset-2">
+				<input asp-action="BuyCurrencyBundle" asp-controller="CurrencyBundle" asp-area="Admin" asp-route-id="@Model.Id" type="submit" class="btn btn-success btn-lg form-control" value="Buy Now!" />
+			</div>
+		</div>
+	</div>
+</form>
+
+
+
+
+
+

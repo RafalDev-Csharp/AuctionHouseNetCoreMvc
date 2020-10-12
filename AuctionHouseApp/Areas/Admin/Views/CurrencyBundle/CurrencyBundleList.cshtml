@@ -1,0 +1,83 @@
+﻿@model AuctionHouseApp.Models.ViewModels.CurrencyBundleListAndTotalViewModel
+
+@{
+	ViewData["Title"] = "Buy currency bundle";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<br />
+<br />
+<form method="post">
+	<div class="border backgroundDark" >
+		<div class="row">
+			<div class="col-6">
+				<h2 class="text-info"> Buy Choosen Currency Bundle </h2>
+			</div>
+		</div>
+
+		<br />
+
+		<div>
+			@if (Model.CurrencyBundleList.Count() > 0)
+			{
+				<ul id="menu-content" class="menu-content">
+					<ul id="menu-filters" class="menu-filter-list list-inline text-center" style="list-style: none;">
+						@foreach (var item in Model.CurrencyBundleList)
+						{
+							<label class="btn">
+								<li data-toggle="collapse" class="btn btn-outline-warning form-control rounded" style="color:black; height:120px; width:400px; font-size:20px; border-width:5px;">
+									<input id="itemSelected" name="itemSelected" type="radio" value="@item.Id" style="visibility:hidden;">
+									Cash value:
+									<span style="font-size:22px; font-weight: bold;">
+										@item.CashValue
+									</span>
+									<br />
+									Game Currency Amount:<span style="font-size:22px; font-weight: bold;"> @item.GameCurrencyAmount</span>
+									<br />
+									Game Currency BONUS: <span style="font-size:22px; font-weight: bold;">@item.BonusCurrency</span>
+								</li>
+							</label>
+						}
+					</ul>
+				</ul>
+				<div class="row col-12 pb-4 text-right">
+					<div class="col-8"></div>
+					<div class="col-4 text-right">
+						<input asp-action="CurrencyBundleList" asp-controller="CurrencyBundle" asp-area="Admin" type="submit" class="btn btn-success btn-lg form-control" value="NEXT STEP" />
+					</div>
+				</div>
+
+			}
+			else
+			{
+				<span>No currency bundle exists...</span>
+			}
+		</div>
+	</div>
+</form>
+
+
+
+@section Scripts {
+
+	<script>
+		var posts = $('.post');
+
+		(function ($) {
+			$("#menu-filters li").click(function () {
+				$("#menu-filters li").removeClass('active');
+				$(this).addClass('active');
+
+				var selectedFilter = $(this).data("filter");
+
+				$(".shop-items").fadeOut();
+
+				setTimeout(function () {
+					$(selectedFilter).slideDown();
+				}, 500);
+			});
+		})(jQuery);
+	</script>
+
+}
+

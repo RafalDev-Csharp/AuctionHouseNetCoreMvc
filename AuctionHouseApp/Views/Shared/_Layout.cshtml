@@ -1,0 +1,133 @@
+﻿@using AuctionHouseApp.Utility
+@using System.Security.Claims;
+@inject AuctionHouseApp.Data.ApplicationDbContext _db
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>@ViewData["Title"] - AuctionHouseApp</title>
+	<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body class="search-background">
+	<header>
+		<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark border-bottom box-shadow mb-3">
+			<div class="container">
+				<a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index"><strong>AuctionHouseApp</strong></a>
+				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+						aria-expanded="false" aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+				<div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+					<partial name="_LoginPartial" />
+					<ul class="navbar-nav flex-grow-1">
+
+						@if (User.IsInRole(SD.ManagerUser))
+						{
+							<li class="nav-item dropdown text-white-50">
+								<a class="nav-link dropdown-toggle btn btn-info btn-lg mr-3 mt-2 text-white" href="#" id="navbarDropDownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+									Content Managment
+								</a>
+								<div class="dropdown-menu" aria-labelledby="navbarDropDownMenuLink">
+									<a class="dropdown-item border-bottom" asp-action="Index" asp-controller="User" asp-area="Admin"><strong>Manage Users</strong></a>
+									<a class="dropdown-item" asp-action="Index" asp-controller="Category" asp-area="Admin">Category</a>
+									<a class="dropdown-item" asp-action="Index" asp-controller="SubCategory" asp-area="Admin">SubCategory</a>
+									<a class="dropdown-item" asp-action="Index" asp-controller="ItemQuality" asp-area="Admin">Item Quality</a>
+									<a class="dropdown-item" asp-action="Index" asp-controller="ForWhichClassItem" asp-area="Admin">ForWhichClassItem</a>
+									<a class="dropdown-item border-top border-bottom" asp-action="Index" asp-controller="GameItem" asp-area="Admin"><strong>Game Items</strong></a>
+									@*<a class="dropdown-item" asp-action="UsersRoles" asp-controller="User" asp-area="Admin">UsersRoles-OLD-VERSION</a>*@
+								<a class="dropdown-item" asp-action="Index" asp-controller="CurrencyBundle" asp-area="Admin"><strong>Currency Bundle</strong></a>
+								</div>
+							</li>
+						}
+
+						@{ if (User.Identity.IsAuthenticated)
+							{
+								if (User.IsInRole(SD.ManagerUser))
+								{
+									<li>
+										<a asp-area="Admin" asp-controller="User" asp-action="BuyCurrency" class="btn btn-warning" style="height:60px;">GET Currency</a>
+									</li>
+								}
+								var claimsIdentity = (ClaimsIdentity)User.Identity;
+								var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+								var currentUser = _db.GameUserDb.Where(u => u.Id == claim.Value).FirstOrDefault();
+
+								<li class="ml-5">
+									<i class="fas fa-coins btn btn-info active" style="font-size:28px; color:gold; height:60px; width:200px; padding-top:15px;">&emsp;<span style="color:black;"> @currentUser.Cash</span></i>
+								</li>
+								<li class="ml-5">
+									<a asp-area="Admin" asp-controller="CurrencyBundle" asp-action="CurrencyBundleList" class="btn btn-danger" style="height:60px;">BUY Currency</a>
+								</li>
+							}
+						}
+					</ul>
+				</div>
+			</div>
+		</nav>
+
+	</header>
+	@{ if (User.Identity.IsAuthenticated)
+		{
+			<div class="row justify-content-center" style="max-height: 55px; margin:0; padding:0;">
+				<a asp-area="Customer" asp-controller="Home" asp-action="Index" class="col-2 btn btn-primary btn-lg form-control" style="text-decoration:none; color:white; border-radius: 30px 30px 0px 0px;">AH-search items to buy</a>
+				<a asp-area="Customer" asp-controller="SellItem" asp-action="Index" class="col-2 btn btn-info btn-lg form-control" style="text-decoration:none; color:white; border-radius: 30px 30px 0px 0px;">My posted items</a>
+
+				@{ int userInventoryCount = 0;
+					if (User.IsInRole(SD.ManagerUser) || User.IsInRole(SD.GamerUser))
+					{
+						var claimsIdentity = (ClaimsIdentity)User.Identity;
+						var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+						userInventoryCount = _db.InventoryDb.Where(u => u.GameUserId == claim.Value).Count();
+					}
+				}
+				<a asp-action="Index" asp-controller="Inventory" asp-area="Customer" class="col-2 btn btn-danger btn-lg form-control" style="text-decoration:none; color:white; border-radius: 30px 30px 0px 0px;"><i class="fas fa-briefcase"></i> &nbsp; (@userInventoryCount) My inventory</a>
+				<a asp-area="Admin" asp-controller="GameItem" asp-action="Index" class="col-2 btn btn-warning btn-lg form-control" style="text-decoration:none; color:white; border-radius: 30px 30px 0px 0px;">Premium Currency Market</a>
+			</div>
+		}
+	}
+	<div class="container">
+		<main role="main">
+			@RenderBody()
+		</main>
+	</div>
+
+	<footer class="border-top footer pl-3 text-white-50" style="background-color: #343a40;">
+		<div class="container">
+			&copy; 2020 - AuctionHouseApp &emsp; <i>email: rafalblaszczykdev@gmail.com</i>
+		</div>
+	</footer>
+	<script src="~/lib/jquery/dist/jquery.min.js"></script>
+	<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="~/js/site.js" asp-append-version="true"></script>
+	<script src="https://kit.fontawesome.com/8ae9f1a142.js" crossorigin="anonymous"></script>
+	<script src="//code.jquery.com/jquery-3.1.1.min.js"></script>
+	@*<script src="~/js/unusual menu.js"></script>*@
+
+
+	@RenderSection("Scripts", required: false)
+
+
+
+
+	<partial name="~/Views/Shared/_modalinfo.cshtml" />
+
+
+
+	<button type="button" class="btn btn-warning btn-lg" data-toggle="modal"
+			style="
+		position: absolute;
+		top: 213px;
+		right: -25px;
+		display: inline-block;
+		transform: rotate(-90deg);"
+			data-target="#Modalinfo">
+		ReadMe&nbsp;<i class="fas fa-info-circle"></i>
+	</button>
+
+
+</body>
+</html>
+

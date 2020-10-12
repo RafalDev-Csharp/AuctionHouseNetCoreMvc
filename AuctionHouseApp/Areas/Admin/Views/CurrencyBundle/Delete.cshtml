@@ -1,0 +1,49 @@
+﻿@model CurrencyBundle
+@{
+	ViewData["Title"] = "Delete";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<br />
+<h2 class="text-info">Delete Currency Bundle</h2>
+<br />
+
+<form method="post" asp-action="Delete">
+	<div class="border backgroundDark">
+		<div class="form-group row">
+			<div class="col-2">
+				<label asp-for="@Model.Id" class="col-form-label"></label>
+			</div>
+			<div class="col-5">
+				<input asp-for="@Model.Id" disabled class="form-control" />
+			</div>
+		</div>
+		<div class="form-group row">
+			<div class="col-2">
+				<label asp-for="@Model.CashValue" class="col-form-label"></label>
+			</div>
+			<div class="col-5">
+				<input asp-for="@Model.CashValue" disabled class="form-control" />
+			</div>
+		</div>
+		<div class="form-group row">
+			<div class="col-2">
+				<label asp-for="@Model.GameCurrencyAmount" class="col-form-label"></label>
+			</div>
+			<div class="col-5">
+				<input asp-for="@Model.GameCurrencyAmount" disabled class="form-control" />
+			</div>
+		</div>
+		<div class="form-group row">
+			<div class="col-2">
+				<label asp-for="@Model.BonusCurrency" class="col-form-label"></label>
+			</div>
+			<div class="col-5">
+				<input asp-for="@Model.BonusCurrency" disabled class="form-control" />
+			</div>
+		</div>
+		<div class="form-group row">
+			<partial name="_DeleteAndBackToListButton" model="@Model.Id" />
+		</div>
+	</div>
+</form>

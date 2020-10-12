@@ -1,0 +1,54 @@
+﻿@model CurrencyBundle
+@{
+	ViewData["Title"] = "Details";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<br />
+<h2 class="text-info">Details Currency Bundle</h2>
+<br />
+
+
+<div class="border backgroundDark">
+	<div class="form-group row">
+		<div class="col-2">
+			<label asp-for="@Model.Id" class="col-form-label"></label>
+		</div>
+		<div class="col-5">
+			<input asp-for="@Model.Id" disabled class="form-control" />
+		</div>
+	</div>
+	<div class="form-group row">
+		<div class="col-2">
+			<label asp-for="@Model.CashValue" class="col-form-label"></label>
+		</div>
+		<div class="col-5">
+			<input asp-for="@Model.CashValue" disabled class="form-control" />
+		</div>
+	</div>
+	<div class="form-group row">
+		<div class="col-2">
+			<label asp-for="@Model.GameCurrencyAmount" class="col-form-label"></label>
+		</div>
+		<div class="col-5">
+			<input asp-for="@Model.GameCurrencyAmount" disabled class="form-control" />
+		</div>
+	</div>
+	<div class="form-group row">
+		<div class="col-2">
+			<label asp-for="@Model.BonusCurrency" class="col-form-label"></label>
+		</div>
+		<div class="col-5">
+			<input asp-for="@Model.BonusCurrency" disabled class="form-control" />
+		</div>
+	</div>
+
+	<div class="form-group row">
+		<div class="col-5 offset-2">
+			<partial name="_DetailsAndBackToListButton" model="Model.Id" />
+		</div>
+	</div>
+</div>
+
+
+

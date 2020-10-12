@@ -1,0 +1,91 @@
+﻿@model AuctionHouseApp.Models.ViewModels.UserAndListOfRolesViewModel
+@using Microsoft.AspNetCore.Identity;
+@inject UserManager<IdentityUser> _userManager
+@{
+	ViewData["Title"] = "ChangeRole";
+}
+
+<br />
+<h2 class="text-info">Change Role</h2>
+<br />
+
+<form method="post" asp-action="ChangeRole">
+	<input asp-for="@Model.GameUserVM.Id" type="hidden" />
+	<div class="border backgroundDark">
+		<div class="form-group row">
+			<div class="col-2">
+				<label asp-for="@Model.GameUserVM.Id" class="col-form-label"></label>
+			</div>
+			<div class="col-5">
+				<input asp-for="@Model.GameUserVM.Id" disabled class="form-control" />
+			</div>
+		</div>
+		<div class="form-group row">
+			<div class="col-2">
+				<label asp-for="@Model.GameUserVM.Name" class="col-form-label"></label>
+			</div>
+			<div class="col-5">
+				<input asp-for="@Model.GameUserVM.Name" disabled class="form-control" />
+			</div>
+		</div>
+		<div class="form-group row">
+			<div class="col-2">
+				<label class="col-form-label">Current Role</label>
+			</div>
+			<div class="col-5">
+				@{
+					var userRole = _userManager.GetRolesAsync(Model.GameUserVM).Result;
+					var show = userRole[0];
+				}
+				<input asp-for="@show" disabled class="form-control" />
+			</div>
+		</div>
+
+		@*<div class="form-group row">
+				<div class="col-2">
+					<label asp-for="@Model.GameUserVM.RoleName" class="col-form-label"></label>
+				</div>
+				<div class="col-5">
+					<input asp-for="@Model.GameUserVM.RoleName" disabled class="form-control" />
+				</div>
+			</div>*@
+
+		<div class="form-group row">
+			<div class="col-2">
+				<label class="col-form-label">Choose New Role</label>
+			</div>
+			<div class="col-5">
+				<select class="custom-select btn" asp-for="@Model.GameUserVM.RoleId">
+
+					@foreach (var item in Model.Roles)
+					{
+						<option id="roleId" name="roleId" class="dropdown-item form-control" value="@item.Id">@item.Name</option>
+					}
+				</select>
+			</div>
+		</div>
+
+		<div class="form-group row">
+			<div class="col-2">
+				<label asp-for="@Model.GameUserVM.Cash" class="col-form-label"></label>
+			</div>
+			<div class="col-5">
+				<input asp-for="@Model.GameUserVM.Cash" disabled class="form-control" />
+			</div>
+		</div>
+
+
+		<div class="row">
+			<div class="col-5">
+				<input type="submit" class="btn btn-danger form-control" value="Change Role" />
+			</div>
+			<div class="col-5">
+				<a asp-action="Index" class="btn btn-primary btn-xs col-lg-12" style="margin-bottom:4px; word-wrap:break-word;">Back to List</a>
+			</div>
+		</div>
+
+	</div>
+</form>
+
+
+

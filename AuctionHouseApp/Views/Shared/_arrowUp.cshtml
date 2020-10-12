@@ -1,0 +1,22 @@
+﻿<div style="position:relative; z-index:10;  bottom:100px; right:25px;">
+	<button id="topBtn"><i class="fas fa-arrow-up"></i></button>
+</div>
+
+@section Scripts {
+	<script>
+				$(document).ready(function () {
+
+					$(window).scroll(function () {
+						if ($(this).scrollTop() > 40) {
+							$('#topBtn').fadeIn();
+						} else {
+							$('#topBtn').fadeOut();
+						}
+					});
+
+					$("#topBtn").click(function () {
+						$('html, body').animate({ scrollTop: 0 }, 800);
+					});
+				});
+	</script>
+}

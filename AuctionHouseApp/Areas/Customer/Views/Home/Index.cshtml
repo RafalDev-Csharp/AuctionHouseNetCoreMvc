@@ -1,0 +1,283 @@
+﻿@model AuctionHouseApp.Models.ViewModels.IndexViewModel
+@using System.Security.Claims;
+@using ReflectionIT.Mvc.Paging
+@using static ReflectionIT.Mvc.Paging.IPagingList
+@inject AuctionHouseApp.Data.ApplicationDbContext _db
+@addTagHelper *,ReflectionIT.Mvc.Paging
+
+@*<nav aria-label="items paging">
+		@await this.Component.InvokeAsync("Pager", new { pagingList = this.Model.PagingListSellItems })
+	</nav>*@
+
+<form method="post">
+	<div class="nav-side-menu row col-3" style="margin:0px; left:0px; background-image:url('/images/bgDark.jpg'); margin-bottom:100px; margin-top:150px;">
+		<div class="menu-list pt-5">
+			<ul id="menu-content" class="menu-content">
+
+				<ul id="menu-filters" class="menu-filter-list list-inline text-center" style="list-style: none;">
+					<label class="btn form-control">
+						<li data-toggle="collapse" class="collapsed active btn btn-info form-control">
+							<input id="itemSelected" name="itemSelected" type="radio" value="any" checked="checked" style="visibility:hidden;"> Show All
+							<span class="badge badge-warning badge-pill">
+								&nbsp;@_db.SellItemDb.Count()
+							</span>
+						</li>
+					</label>
+
+					@{
+						var catSign = "c";
+						var subSign = "s";
+					}
+
+
+					@foreach (var category in Model.CategoriesVM)
+					{
+						string cat = "#" + category.Name;
+						var catValue = catSign + category.Id;
+						<label class="btn form-control">
+							<li data-toggle="collapse" data-target="@cat" class="collapsed btn btn-info form-control sub-menu">
+								<input id="itemSelected" name="itemSelected" type="radio" value="@catValue" style="visibility:hidden;">@category.Name
+								<span class="badge badge-primary badge-pill">
+									&nbsp;@_db.SellItemDb.Where(i => i.GameItemVP.CategoryVP.Id == category.Id).Count()
+								</span>
+								<span class="btn"><i class="fas fa-arrow-circle-down"></i></span>
+							</li>
+						</label>
+
+						<ul class="sub-menu collapse" id="@category.Name">
+							@foreach (var sub in Model.SubCategoriesVM.Where(c => c.CategoryId == category.Id))
+							{
+								var subcatValue = subSign + sub.Id;
+								<label class="btn form-control">
+									<li class="btn btn-primary form-control">
+										<input id="itemSelected" name="itemSelected" type="radio" value="@subcatValue" style="visibility: hidden;" />@sub.Name
+										<span class="badge badge-dark badge-pill">
+											&nbsp;@_db.SellItemDb.Where(i => i.GameItemVP.SubCategoryVP.Id == sub.Id).Count()
+										</span>
+									</li>
+								</label>
+							}
+						</ul>
+					}
+				</ul>
+			</ul>
+		</div>
+	</div>
+
+
+	<div class="col-12">
+		<div class="border backgroundDark " style="width: 1269px;
+		margin-left: -95px;
+		border-radius: 0 0 10px 10px;
+		min-height: 700px;">
+			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+			<div class="row pb-4">
+				<div class="col-9">
+					<input asp-for="@Model.Search" class="form-control" type="text" name="search" id="search" placeholder="Enter the name of searching item(s)..." />
+				</div>
+				<div class="col-3 text-right">
+					<input asp-action="Index" asp-controller="Home" asp-area="Customer" type="submit" class="btn btn-success form-control" value="Search" />
+				</div>
+			</div>
+			<div class="row pb-4">
+				<div class="col-2">
+					<span>Min level</span>
+					<input class="form-control" placeholder="min level..." asp-for="@Model.MinLvl" />
+					<span asp-validation-for="@Model.MinLvl" class="text-danger"></span>
+				</div>
+				<div class="col-2">
+					<span>Max level</span>
+					<input class="form-control" placeholder="max level..." asp-for="@Model.MaxLvl" />
+					<span asp-validation-for="@Model.MaxLvl" class="text-danger"></span>
+				</div>
+				<div class="col-2 pl-4">
+					<span>Quality</span>
+
+					<div>
+						<select class="custom-select btn btn-danger" asp-for="@Model.ItemType">
+							@*<option id="itemQ" name="itemQ" class="dropdown-item form-control" value="Any" style="background-color:white;">-Any-</option>*@
+							@foreach (var item in Model.ItemQualityListVP)
+							{
+								@*<option id="itemQ" name="itemQ" class="dropdown-item form-control" value="@item.Id">@item.Name</option>*@
+								<option class="dropdown-item form-control" value="@item.Id">@item.Name</option>
+							}
+						</select>
+					</div>
+				</div>
+				<div class="col-2 pl-3">
+					<span>Type</span>
+					<div>
+						<select class="custom-select btn btn-outline-warning" asp-for="@Model.ForClass">
+							@*<option id="itemQ" name="itemQ" class="dropdown-item form-control" value="Any" style="background-color:white;">-Any-</option>*@
+							@foreach (var item in Model.ForClassListVP)
+							{
+								<option class="dropdown-item form-control" value="@item.Id">@item.Name</option>
+							}
+						</select>
+					</div>
+				</div>
+				<div class="col-2 pl-5" style="margin-right:0;">
+					<span>Total result:</span>
+					<input disabled class="form-control btn-outline-info text-center font-weight-bold" value="@Model.SellItemsVM.Count()" />
+				</div>
+			</div>
+
+
+
+			@*<th>
+					<input asp-action="Index" asp-controller="Home" asp-area="Customer" asp-for="@Model.SortOrder" type="submit" class="btn btn-info form-control" name="sortOrder" value="Seller Name" />
+				</th>*@
+			@if (Model.SellItemsVM.Count() > 0)
+			{
+				<div class="row" id="menu-wrapper">
+					<table class="table table-striped border">
+						<tr>
+							<th>@Html.DisplayNameFor(i => i.SellItemsVM.ElementAt(0).GameItemVP.Image)</th>
+							<th>
+								<button asp-action="Index" asp-controller="Home" asp-area="Customer" asp-for="@Model.SortOrder" type="submit" class="btn btn-info form-control" name="sortOrder" value="Item Name">
+									Item Name &emsp; <i class="fas fa-sort"></i>
+								</button>
+							</th>
+							<th>
+								<button asp-action="Index" asp-controller="Home" asp-area="Customer" asp-for="@Model.SortOrder" type="submit" class="btn btn-info form-control" name="sortOrder" value="Seller Name">
+									Seller Name &emsp; <i class="fas fa-sort"></i>
+								</button>
+							</th>
+							<th>
+								<button asp-action="Index" asp-controller="Home" asp-area="Customer" asp-for="@Model.SortOrder" type="submit" class="btn btn-info form-control" name="sortOrder" value="Date Time End">
+									Date Time End &emsp; <i class="fas fa-sort"></i>
+								</button>
+							</th>
+							<th>
+								<button asp-action="Index" asp-controller="Home" asp-area="Customer" asp-for="@Model.SortOrder" type="submit" class="btn btn-info form-control" name="sortOrder" value="Price">
+									Price &emsp; <i class="fas fa-sort"></i>
+								</button>
+							</th>
+							<th>
+								<button asp-action="Index" asp-controller="Home" asp-area="Customer" asp-for="@Model.SortOrder" type="submit" class="btn btn-info form-control" name="sortOrder" value="Count">
+									Count &emsp; <i class="fas fa-sort"></i>
+								</button>
+							</th>
+							<th>
+								BUY
+							</th>
+						</tr>
+
+						@foreach (var item in Model.PagingListSellItems)
+						{
+							<tr>
+								<td>
+									<img src="@item.GameItemVP.Image" width="80" height="50" style="border-radius:5px; border:1px solid #bbb9b9;" />
+								</td>
+								<td>
+									@Html.DisplayFor(c => item.GameItemVP.Name)
+								</td>
+								<td>
+									@Html.DisplayFor(c => item.SellerName)
+								</td>
+								<td>
+									@Html.DisplayFor(c => item.TimeRemained)
+								</td>
+								<td>
+									@Html.DisplayFor(c => item.Price)
+								</td>
+								<td>
+									@Html.DisplayFor(c => item.CountOfItemsToSell)
+								</td>
+
+								@{
+									string colorX = "#3992E5";
+									var claimsIdentity = (ClaimsIdentity)User.Identity;
+									var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+
+									if (item.SellerId != claim.Value)
+									{
+										colorX = "#3EB286";
+										<td style="background-color: @colorX;">
+											<a asp-action="BuyItem" asp-route-id="@item.Id" class="btn btn-warning ml-3 mt-2">
+												BUY
+											</a>
+										</td>
+
+									}
+									else
+									{
+										<td style="background-color: @colorX;">
+											<a class="btn btn-success active text-white ml-3 mt-2">
+												OWNED
+											</a>
+										</td>
+									}
+								}
+							</tr>
+						}
+					</table>
+
+				</div>
+			}
+			else
+			{
+				<span>No item exists...</span>
+			}
+			<div class="row col-12">
+				@*<nav aria-label="nav Xtest">
+						<vc:pager paging-list="@Model.PagingListSellItems"></vc:pager> -- LARGE paging
+					@Html.Partial("_PagingPartial", this.Model.PagingListSellItems) - obsolete
+					</nav>*@
+				<nav aria-label="xtestx">
+					<partial name="_PagingPartial" model="this.Model.PagingListSellItems" />
+				</nav>
+
+			</div>
+		</div>
+	</div>
+</form>
+
+<div style="position:relative; z-index:10;  bottom:100px; right:25px;">
+	<button id="topBtn"><i class="fas fa-arrow-up"></i></button>
+</div>
+
+
+
+@section Scripts {
+	<script src="https://code.jquery.com/jquery-3.4.1.js"
+			integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+			crossorigin="anonymous">
+	</script>
+
+	<script>
+		$(document).ready(function () {
+
+			$(window).scroll(function () {
+				if ($(this).scrollTop() > 40) {
+					$('#topBtn').fadeIn();
+				} else {
+					$('#topBtn').fadeOut();
+				}
+			});
+
+			$("#topBtn").click(function () {
+				$('html, body').animate({ scrollTop: 0 }, 800);
+			});
+		});
+	</script>
+
+	<script>
+		var posts = $('.post');
+
+		(function ($) {
+			$("#menu-filters li").click(function () {
+				$("#menu-filters li").removeClass('active');
+				$(this).addClass('active');
+
+				var selectedFilter = $(this).data("filter");
+
+				$(".shop-items").fadeOut();
+
+				setTimeout(function () {
+					$(selectedFilter).slideDown();
+				}, 500);
+			});
+		})(jQuery);
+	</script>
+}

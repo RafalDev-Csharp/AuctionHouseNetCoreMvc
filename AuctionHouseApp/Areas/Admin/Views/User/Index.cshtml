@@ -1,0 +1,111 @@
+﻿@model IEnumerable<GameUser>
+@using AuctionHouseApp.Utility
+@using Microsoft.AspNetCore.Identity;
+@inject UserManager<IdentityUser> _userManager
+
+@{
+	ViewData["Title"] = "Index";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<br />
+<br />
+<div class="border backgroundDark">
+	<div class="row">
+		<div class="col-6">
+			<h2 class="text-info"> Users List</h2>
+		</div>
+		<div class="col-6 text-right">
+			<a asp-area="Identity" asp-page="/Account/Register" class="btn btn-info">
+				<i class="fas fa-plus"></i> &nbsp; New user with Role registration
+			</a>
+		</div>
+	</div>
+	<br />
+	<div>
+		@if (Model.Count() > 0)
+		{
+			<table class="table table-striped border">
+				<tr>
+					<th>
+						@Html.DisplayNameFor(c => c.Name)
+					</th>
+					<th>
+						@Html.DisplayNameFor(u => u.Id)
+					</th>
+					<th>
+						@Html.DisplayNameFor(u => u.Cash)
+					</th>
+					<th>Role</th>
+					<th>Change Role</th>
+					<th>Manage</th>
+					<th>Give Currency</th>
+
+					<th>Remove User</th>
+				</tr>
+				@foreach (var user in Model)
+				{
+					<tr>
+						<td>
+							@Html.DisplayFor(c => user.Name)
+						</td>
+						<td>
+							@Html.DisplayFor(u => user.Id)
+						</td>
+						<td>
+							@Html.DisplayFor(u => user.Cash)
+						</td>
+						@*<td>
+								@Html.DisplayFor(u => user.RoleName)
+							</td>*@
+						<td>
+							@{
+								var userRole = _userManager.GetRolesAsync(user).Result;
+								var show = userRole[0];
+							}
+							@show
+						</td>
+						<td>
+							<a asp-action="ChangeRole" asp-route-id="@user.Id" class="btn btn-warning form-control">
+								<i class="fas fa-user-tag" style="font:black; font-size:22px;"></i>
+							</a>
+						</td>
+						<td>
+							@if (user.LockoutEnd == null || user.LockoutEnd < DateTime.Now)
+							{
+								<a class="btn btn-success text-white" asp-action="Lock" asp-route-id="@user.Id">
+									<i class="fas fa-lock-open"></i>
+								</a>
+							}
+							else
+							{
+								<a class="btn btn-danger text-white" asp-action="Unlock" asp-route-id="@user.Id">
+									<i class="fas fa-lock"></i>
+								</a>
+							}
+						</td>
+						<td>
+							<a asp-action="GiveCashToUser" asp-route-id="@user.Id" class="btn btn-primary form-control" style="width:260px;">
+								Give currency to this user
+							</a>
+						</td>
+
+						<td>
+							<a asp-action="RemoveUser" asp-route-id="@user.Id" class="btn btn-danger">
+								<i class="far fa-window-close"></i>
+							</a>
+						</td>
+
+					</tr>
+				}
+			</table>
+		}
+		else
+		{
+			<span>No user exists...</span>
+		}
+	</div>
+</div>
+
+
+
